@@ -14,6 +14,9 @@ instance/
 .env
 # local_settings.json (Eliminado del ignore para permitir versionado de rutas corporativas)
 
+# Instalador Universal (Excluido del repo, para distribución manual)
+INSTALAR_VALIN.bat
+
 # Archivos de sqlite temporales
 *.db
 *.sqlite3
