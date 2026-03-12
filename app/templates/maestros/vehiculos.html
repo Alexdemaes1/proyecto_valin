@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="color: var(--color-primary-dark);">Gestión de Vehículos</h1>
+    <a href="{{ url_for('maestros.create_vehiculo') }}" class="btn-primary">+ Nuevo Vehículo</a>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <table class="valin-table">
+        <thead>
+            <tr>
+                <th>Cód. Interno</th>
+                <th>Tractora</th>
+                <th>Remolque</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td style="font-weight: bold;">{{ item.codigo_interno }}</td>
+                <td>{{ item.matricula_tractora or '-' }}</td>
+                <td>{{ item.matricula_semirremolque or '-' }}</td>
+                <td>
+                    {% if item.activo %}
+                    <span style="color: var(--color-success);">● Activo</span>
+                    {% else %}
+                    <span style="color: var(--color-text-muted);">○ Inactivo</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn-primary"
+                        style="padding: 5px 10px; font-size: 12px; background-color: #64748B;">Editar</button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 40px; color: var(--color-text-muted);">No hay
+                    vehículos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valin e Hijos S.A. - Gestión</title>
+    <!-- CSS Corporativo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- HTMX para microinteracciones -->
+    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+    <style>
+        @media print {
+            .sidebar {
+                display: none !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <!-- BARRA LATERAL (Solo visible logueado) -->
+        {% if current_user.is_authenticated %}
+        <nav class="sidebar no-print">
+            <div class="logo">Transportes Valin</div>
+            <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+
+            <div style="padding: 10px 20px; color: var(--color-text-muted); font-size: 12px; margin-top: 10px;">
+                PLANIFICACIÓN</div>
+            <a href="{{ url_for('viajes.index') }}">Pollo Vivo</a>
+            <a href="{{ url_for('frigos.index') }}">Frigos / Nacional</a>
+            <a href="{{ url_for('aldi.index') }}">ALDI</a>
+
+            <div style="padding: 10px 20px; color: var(--color-text-muted); font-size: 12px; margin-top: 10px;">RRHH
+            </div>
+            <a href="{{ url_for('rrhh.index') }}">Horarios</a>
+            <a href="#">Ficha Chofer</a>
+
+            <div style="padding: 10px 20px; color: var(--color-text-muted); font-size: 12px; margin-top: 10px;">
+                CONFIGURACIÓN</div>
+            <a href="{{ url_for('maestros.index') }}">Datos Maestros</a>
+            <a href="{{ url_for('auth.logout') }}">Cerrar Sesión</a>
+        </nav>
+        {% endif %}
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            <!-- Alertas Globales Flash de Flask -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <!-- Bloque reemplazable por cada vista -->
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+
+</html>

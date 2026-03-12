@@ -1,0 +1,63 @@
+<tr id="aldi-{{ s.id }}">
+    <!-- VEHICULO -->
+    <td>
+        <select class="form-control" name="valor" hx-post="{{ url_for('aldi.update_row') }}" hx-trigger="change"
+            hx-target="#aldi-{{ s.id }}" hx-swap="outerHTML">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="servicio_id" value="{{ s.id }}">
+            <input type="hidden" name="campo" value="vehiculo_id">
+            <option value="">-- Camión --</option>
+            {% for v in vehiculos %}
+            <option value="{{ v.id }}" {% if s.vehiculo_id==v.id %}selected{% endif %}>
+                {{ v.codigo_interno }}
+            </option>
+            {% endfor %}
+        </select>
+    </td>
+
+    <!-- CONDUCTOR -->
+    <td>
+        <select class="form-control" name="valor" hx-post="{{ url_for('aldi.update_row') }}" hx-trigger="change"
+            hx-target="#aldi-{{ s.id }}" hx-swap="outerHTML">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="servicio_id" value="{{ s.id }}">
+            <input type="hidden" name="campo" value="conductor_id">
+            <option value="">-- Chofer --</option>
+            {% for c in conductores %}
+            <option value="{{ c.id }}" {% if s.conductor_id==c.id %}selected{% endif %}>
+                {{ c.alias }}
+            </option>
+            {% endfor %}
+        </select>
+    </td>
+
+    <!-- TIENDAS 1 a 4 -->
+    {% set t1 = s.tienda_1_id %}
+    {% set t2 = s.tienda_2_id %}
+    {% set t3 = s.tienda_3_id %}
+    {% set t4 = s.tienda_4_id %}
+
+    {% for i in range(1, 5) %}
+    <td>
+        {% if i == 1 %}{% set current_val = t1 %}{% elif i == 2 %}{% set current_val = t2 %}{% elif i == 3 %}{% set
+        current_val = t3 %}{% else %}{% set current_val = t4 %}{% endif %}
+        <select class="form-control" name="valor" hx-post="{{ url_for('aldi.update_row') }}" hx-trigger="change"
+            hx-target="#aldi-{{ s.id }}" hx-swap="outerHTML">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="servicio_id" value="{{ s.id }}">
+            <input type="hidden" name="campo" value="tienda_{{ i }}_id">
+            <option value="">-- Tienda {{ i }} --</option>
+            {% for t in tiendas %}
+            <option value="{{ t.id }}" {% if current_val==t.id %}selected{% endif %}>
+                {{ t.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </td>
+    {% endfor %}
+
+    <!-- TRAYECTO CALC -->
+    <td style="font-size: 11px; font-weight: bold; color: #0F766E;">
+        {{ s.texto_trayecto_calc or 'SAGUNTO' }}
+    </td>
+</tr>

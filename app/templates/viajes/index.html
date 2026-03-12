@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="color: var(--color-primary-dark);">Planificación Pollo Vivo</h1>
+    <form action="{{ url_for('viajes.crear_planificacion') }}" method="post"
+        style="display: flex; gap: 10px; align-items: center;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label style="font-size: 14px; font-weight: bold;">Nueva Fecha:</label>
+        <input type="date" name="fecha" class="form-control" style="width: auto;" required>
+        <button type="submit" class="btn-primary">+ Iniciar Día</button>
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <table class="valin-table">
+        <thead>
+            <tr>
+                <th>Fecha Operativa</th>
+                <th>Día</th>
+                <th>Semana</th>
+                <th>Viajes Totales</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in planificaciones %}
+            <tr>
+                <td style="font-weight: bold;">{{ p.fecha_operativa }}</td>
+                <td>{{ p.dia_semana }}</td>
+                <td>Semana {{ p.semana_excel }}</td>
+                <td>{{ p.viajes|length }}</td>
+                <td>
+                    <span style="color: var(--color-success);">{{ p.estado|upper }}</span>
+                </td>
+                <td>
+                    <a href="{{ url_for('viajes.view_planificacion', id=p.id) }}" class="btn-primary"
+                        style="padding: 5px 12px; font-size: 12px;">Entrar a Planificar</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px; color: var(--color-text-muted);">No hay
+                    planificaciones abiertas. Inicie una arriba.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

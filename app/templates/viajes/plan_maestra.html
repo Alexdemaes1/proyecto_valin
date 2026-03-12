@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;" class="no-print">
+    <div>
+        <h1 style="color: var(--color-primary-dark); margin-bottom: 5px;">Planificación: {{
+            plan.fecha_operativa.strftime('%d/%m/%Y') }} ({{ plan.dia_semana }})</h1>
+        <p style="color: var(--color-text-muted); margin-top: 0;">Módulo Pollo Vivo - Matanza Regular</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <a href="{{ url_for('exports.pdf_chofer', plan_id=plan.id) }}" class="btn-primary"
+            style="background-color: #64748B;">Generar PDF Chofer</a>
+        <form action="{{ url_for('viajes.add_row', plan_id=plan.id) }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn-primary">+ Añadir Viaje</button>
+        </form>
+    </div>
+</div>
+
+<div class="card" style="padding: 0; overflow-x: auto;">
+    <table class="valin-table" id="tabla-viajes">
+        <thead>
+            <tr>
+                <th style="width: 40px;">#</th>
+                <th style="width: 150px;">Vehículo</th>
+                <th style="width: 150px;">Conductor</th>
+                <th style="min-width: 200px;">Granja / Localidad</th>
+                <th style="width: 80px;">Equip.</th>
+                <th style="width: 100px;">Llegada Mat.</th>
+                <th style="width: 100px; background-color: var(--color-primary);">Hora Carga</th>
+                <th style="width: 100px; background-color: var(--color-primary);">Salida Sueca</th>
+                <th style="width: 100px;">Fin Aprox.</th>
+                <th style="width: 60px;">Ext.</th>
+            </tr>
+        </thead>
+        <tbody id="viajes-body">
+            {% for v in plan.viajes|sort(attribute='orden_visual') %}
+            {% include 'viajes/partials/viaje_row.html' with context %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Pequeño script para asegurar que los inputs de hora se comporten bien o para alertas extra
+    document.body.addEventListener('htmx:afterRequest', function (evt) {
+        if (evt.detail.successful) {
+            // Animación sutil de "recalculado"
+            const target = evt.detail.target;
+            target.style.transition = 'none';
+            target.style.backgroundColor = '#fef9c3'; // amarillo suave
+            setTimeout(() => {
+                target.style.transition = 'background-color 0.5s ease-out';
+                target.style.backgroundColor = '';
+            }, 100);
+        }
+    });
+</script>
+{% endblock %}

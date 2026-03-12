@@ -1,0 +1,25 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+
+# Directorios de configuraciones e instancias privadas
+instance/
+.env
+# local_settings.json (Eliminado del ignore para permitir versionado de rutas corporativas)
+
+# Archivos de sqlite temporales
+*.db
+*.sqlite3
+*.db-journal
+
+# VSCode/IDE
+.vscode/
+.idea/
+*.swp

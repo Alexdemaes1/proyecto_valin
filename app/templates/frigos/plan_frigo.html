@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;" class="no-print">
+    <div>
+        <h1 style="color: var(--color-primary-dark); margin-bottom: 5px;">Plan Frigoríficos: {{
+            plan.fecha_operativa.strftime('%d/%m/%Y') }}</h1>
+        <p style="color: var(--color-text-muted); margin-top: 0;">Rutas Nacionales y Servicios Fijos</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <form action="{{ url_for('frigos.add_row', plan_id=plan.id) }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn-primary">+ Añadir Línea Frigo</button>
+        </form>
+    </div>
+</div>
+
+<div class="card" style="padding: 0; overflow-x: auto;">
+    <table class="valin-table">
+        <thead>
+            <tr>
+                <th style="width: 180px;">Ruta / Destino</th>
+                <th style="width: 150px;">Vehículo</th>
+                <th style="width: 150px;">Conductor</th>
+                <th style="width: 100px;">Salida Sueca</th>
+                <th>Observaciones / Trayecto</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in plan.frigos %}
+            {% include 'frigos/partials/frigo_row.html' with context %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

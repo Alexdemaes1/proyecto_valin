@@ -1,0 +1,97 @@
+<tr id="viaje-{{ viaje.id }}" class="{% if viaje.alerta_duplicidad_conductor %}alert-error{% endif %}">
+    <td style="text-align: center; color: var(--color-text-muted);">{{ viaje.orden_visual }}</td>
+
+    <!-- VEHICULO -->
+    <td>
+        <select class="form-control" name="valor" hx-post="{{ url_for('viajes.update_row') }}" hx-trigger="change"
+            hx-target="#viaje-{{ viaje.id }}" hx-swap="outerHTML">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="viaje_id" value="{{ viaje.id }}">
+            <input type="hidden" name="campo" value="vehiculo_id">
+            <option value="">-- Camión --</option>
+            {% for veh in vehiculos %}
+            <option value="{{ veh.id }}" {% if viaje.vehiculo_id==veh.id %}selected{% endif %}>
+                {{ veh.codigo_interno }} ({{ veh.matricula_tractora }})
+            </option>
+            {% endfor %}
+        </select>
+    </td>
+
+    <!-- CONDUCTOR -->
+    <td>
+        <select class="form-control" name="valor"
+            style="{% if viaje.alerta_duplicidad_conductor %}border: 2px solid var(--color-danger); background-color: var(--color-danger-bg);{% endif %}"
+            hx-post="{{ url_for('viajes.update_row') }}" hx-trigger="change" hx-target="#viaje-{{ viaje.id }}"
+            hx-swap="outerHTML">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="viaje_id" value="{{ viaje.id }}">
+            <input type="hidden" name="campo" value="conductor_id">
+            <option value="">-- Chofer --</option>
+            {% for cond in conductores %}
+            <option value="{{ cond.id }}" {% if viaje.conductor_id==cond.id %}selected{% endif %}>
+                {{ cond.alias }}
+            </option>
+            {% endfor %}
+        </select>
+        {% if viaje.alerta_duplicidad_conductor %}
+        <div style="font-size: 10px; color: var(--color-danger); font-weight: bold;">[DUPLICADO]</div>
+        {% endif %}
+    </td>
+
+    <!-- GRANJA -->
+    <td>
+        <select class="form-control" name="valor" hx-post="{{ url_for('viajes.update_row') }}" hx-trigger="change"
+            hx-target="#viaje-{{ viaje.id }}" hx-swap="outerHTML">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="viaje_id" value="{{ viaje.id }}">
+            <input type="hidden" name="campo" value="granja_id">
+            <option value="">-- Granja --</option>
+            {% for g in granjas %}
+            <option value="{{ g.id }}" {% if viaje.granja_id==g.id %}selected{% endif %}>
+                {{ g.codigo }} - {{ g.nombre_cliente }} ({{ g.localidad }})
+            </option>
+            {% endfor %}
+        </select>
+    </td>
+
+    <!-- MOFFETT -->
+    <td>
+        <input type="text" name="valor" class="form-control" value="{{ viaje.moffett or '' }}"
+            hx-post="{{ url_for('viajes.update_row') }}" hx-trigger="blur" hx-target="#viaje-{{ viaje.id }}"
+            hx-swap="outerHTML">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="viaje_id" value="{{ viaje.id }}">
+        <input type="hidden" name="campo" value="moffett">
+    </td>
+
+    <!-- LLEGADA MATADERO -->
+    <td>
+        <input type="text" name="valor" class="form-control" value="{{ viaje.hora_llegada_matadero }}"
+            placeholder="02:30" hx-post="{{ url_for('viajes.update_row') }}" hx-trigger="blur change delay:500ms"
+            hx-target="#viaje-{{ viaje.id }}" hx-swap="outerHTML">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="viaje_id" value="{{ viaje.id }}">
+        <input type="hidden" name="campo" value="hora_llegada_matadero">
+    </td>
+
+    <!-- CALCULADOS (SOLO LECTURA) -->
+    <td style="font-weight: bold; color: var(--color-primary-dark); text-align: center;">
+        {{ viaje.hora_carga_granja_calc or '--:--' }}
+    </td>
+    <td style="font-weight: bold; color: var(--color-primary-dark); text-align: center;">
+        {{ viaje.hora_salida_sueca_calc or '--:--' }}
+    </td>
+    <td style="text-align: center;">
+        {{ viaje.hora_fin_jornada_aprox_calc or '--:--' }}
+    </td>
+
+    <!-- EXTRA -->
+    <td>
+        <input type="text" name="valor" class="form-control" value="{{ viaje.codigo_visual_extra or '' }}"
+            hx-post="{{ url_for('viajes.update_row') }}" hx-trigger="blur" hx-target="#viaje-{{ viaje.id }}"
+            hx-swap="outerHTML">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="viaje_id" value="{{ viaje.id }}">
+        <input type="hidden" name="campo" value="codigo_visual_extra">
+    </td>
+</tr>
