@@ -4,8 +4,6 @@ from . import bp
 from app.services.pdf_generator import PdfGenerator
 from app.models.operaciones import PlanificacionDia
 from app.models.rrhh import JornadaEmpleado
-import pandas as pd
-import io
 
 @bp.route('/pdf/chofer/<int:plan_id>')
 @login_required
@@ -25,6 +23,9 @@ def pdf_chofer(plan_id):
 @bp.route('/excel/horario/<int:plan_id>')
 @login_required
 def excel_horario(plan_id):
+    import pandas as pd
+    import io
+
     plan = PlanificacionDia.query.get_or_404(plan_id)
     jornadas = JornadaEmpleado.query.filter_by(planificacion_id=plan_id).all()
     

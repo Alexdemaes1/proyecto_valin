@@ -42,7 +42,7 @@ def crear_planificacion():
 @bp.route('/<int:id>')
 @login_required
 def view_planificacion(id):
-    plan = PlanificacionDia.query.get_or_4_4(id)
+    plan = PlanificacionDia.query.get_or_404(id)
     granjas = Granja.query.filter_by(activo=True).order_by(Granja.codigo).all()
     vehiculos = Vehiculo.query.filter_by(activo=True).order_by(Vehiculo.codigo_interno).all()
     conductores = Conductor.query.filter_by(activo=True).order_by(Conductor.alias).all()
@@ -112,7 +112,7 @@ def update_row():
 @bp.route('/<int:plan_id>/add_row', methods=['POST'])
 @login_required
 def add_row(plan_id):
-    plan = PlanificacionDia.query.get_or_4_4(plan_id)
+    plan = PlanificacionDia.query.get_or_404(plan_id)
     last_orden = ViajePollo.query.filter_by(planificacion_id=plan_id).count()
     
     # Buscamos valores por defecto (ej la primera granja, vehiculo o dejar vacio)
