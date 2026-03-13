@@ -1,11 +1,9 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 from . import bp
 from .forms import LocalConfigForm
 from app.utils.local_settings import LocalSettingsManager
 from app.services.storage_backend.drive_sync_service import GoogleDriveSyncService
-from scripts.import_masters import import_excel_data
-from flask import current_app
 import os
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -47,6 +45,8 @@ def index():
 @bp.route('/import-legacy', methods=['POST'])
 @login_required
 def import_legacy():
+    from scripts.import_masters import import_excel_data
+    
     settings = LocalSettingsManager.get_settings()
     excel_path = settings.get('legacy_excel_path')
     
