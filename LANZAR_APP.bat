@@ -50,7 +50,9 @@ python scripts\create_admin.py
 
 :: 7. Lanzamiento Web
 echo.
-echo [OK] SISTEMA LISTO PARA OPERAR LOCALMENTE.
+echo [OK] SISTEMA LISTO PARA OPERAR EN LA RED LOCAL.
+echo [INFO] Accesible desde este PC en: http://127.0.0.1:5000
+echo [INFO] Para acceder desde otro ordenador, busque su IP en el texto de abajo.
 echo [INFO] Si es la primera vez, configure Google Drive en el Dashboard.
 echo.
 start http://127.0.0.1:5000
