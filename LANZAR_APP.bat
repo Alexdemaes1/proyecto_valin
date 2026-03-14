@@ -23,14 +23,11 @@ if not exist "venv" (
 
 :: 3. Activar entorno e instalar dependencias
 echo [INFO] Verificando dependencias activas...
-call venv\Scripts\activate
+if exist "venv\Scripts\activate.bat" (
+    call venv\Scripts\activate.bat
+)
+
 python -m pip install --upgrade pip
-
-:: 3b. Forzar reinstalacion de numpy (soluciona bloqueos de DLL en Windows)
-echo [INFO] Instalando numpy (forzado para evitar bloqueos de DLL)...
-pip install --force-reinstall numpy>=1.26.0
-
-:: 3c. Instalar el resto de dependencias
 pip install -r requirements.txt
 
 :: 4. Config base .env
@@ -40,7 +37,6 @@ if not exist ".env" (
       echo FLASK_APP=run.py
       echo FLASK_ENV=development
       echo SECRET_KEY=valin-!secure-v1-!
-      echo DATABASE_URI=sqlite:///instance/valin.db
     ) > .env
 )
 
