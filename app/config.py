@@ -8,7 +8,7 @@ load_dotenv(os.path.join(parent_dir, '.env'))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'clave-por-defecto-insegura'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or \
-        'sqlite:///' + os.path.join(parent_dir, 'instance', 'valin.db')
+        'sqlite:///' + os.path.join(parent_dir, 'valin.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
 class DevelopmentConfig(Config):
