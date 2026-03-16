@@ -55,7 +55,7 @@ def ensure_admin_exists(password='10041004'):
         db.commit()
         admin_role = db.execute("SELECT id FROM roles WHERE name = 'Admin'").fetchone()
 
-    # Asegurar usuario admin
+    # Asegurar usuario admin (solo se crea la primera vez, nunca se sobreescribe)
     admin_user = db.execute("SELECT id FROM users WHERE username = 'admin'").fetchone()
     if not admin_user:
         db.execute(
@@ -65,10 +65,3 @@ def ensure_admin_exists(password='10041004'):
         )
         db.commit()
         print("[OK] Usuario 'admin' creado.")
-    else:
-        # Actualizar contraseña por si cambió en config
-        db.execute(
-            "UPDATE users SET password_hash = ? WHERE username = 'admin'",
-            (generate_password_hash(password),)
-        )
-        db.commit()
