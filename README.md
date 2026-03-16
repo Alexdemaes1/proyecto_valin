@@ -1,43 +1,93 @@
-# Sistema de Gestión Valin (v1.0)
-Aplicación local de escritorio basada en Flask para la gestión logística de **Transportes Valin e Hijos S.A.**
+# Transportes Valin e Hijos S.A. — Sistema de Gestión de Tráfico
 
-## 🚀 Cómo empezar (Rápido)
+Aplicación de gestión interna para planificación de viajes, control de frigoríficos y recursos humanos.
 
-1. **Doble clic en `LANZAR_APP.bat`**: Este archivo hará todo por ti:
-   - Creará el entorno virtual.
-   - Instalará las librerías necesarias.
-   - Configurará la base de datos inicial.
-   - Abrirá el navegador y lanzará la aplicación automáticamente.
+---
 
-## 🛠️ Instalación manual (Opcional)
+## Requisitos
 
-## ⚙️ Configuración del Sincronizador y Google Drive
+- **Windows 10 o superior**
+- **Python 3.10 o superior** — [Descargar aquí](https://www.python.org/downloads/)
+  - ⚠️ Al instalar, **marcar** la casilla **"Add Python to PATH"**
 
-Este sistema está diseñado por **Transportes Valin** para ser portable. Al clonar el repositorio y ejecutar el `.bat`:
-1. **Rutas Dinámicas:** El sistema detecta automáticamente dónde está instalado, eliminando la necesidad de configurar rutas absolutas manualmente.
-2. **Vínculo con Google Drive:** Desde el **Dashboard**, puedes configurar:
-   - La carpeta raíz del equipo en Drive.
-   - El nombre del archivo de base de datos maestra.
-   - La ruta al Excel legacy (`.xlsm`) para importar datos maestros.
-3. **Persistencia:** La configuración se guarda en `local_settings.json` y se puede versionar en Git si se desea compartir entre terminales similares.
-4. **Migración Express:** Si configuras el "Excel Legacy", aparecerá un botón en el Dashboard para cargar automáticamente todos los **Camiones, Chóferes y Granjas** al nuevo sistema.
+---
 
-## 👥 Usuarios por Defecto
-- **Usuario:** `admin`
-- **Contraseña:** `10041004`
+## Instalación
 
-## 🛠️ Estructura del Sistema
+1. Descargue o clone este repositorio en una carpeta del PC
+2. Haga **doble clic** en `LANZAR_APP.bat`
+3. La primera vez tardará 1-2 minutos
 
-- **Pollo Vivo:** Planificación con algoritmo inverso (basado en hora de llegada a matadero).
-- **Frigos/Aldi:** Gestión de rutas nacionales y entregas multitienda.
-- **RRHH:** Motor de consolidación que agrupa viajes, calcula nocturnidades (22:00 a 06:00) y detecta "dobles viajes" (Tipo 2).
-- **Exportaciones:** Generación de PDFs para conductores y Excel para nóminas/contabilidad.
+---
 
-## 🔒 Seguridad para GitHub
-El archivo `.gitignore` ya está configurado para **excluir**:
-- El entorno virtual (`venv/`)
-- Tus bases de datos locales (`instance/`)
-- Tus configuraciones privadas de Google Drive (`local_settings.json`)
-- El archivo `.env`
+## Uso diario
 
-Puedes subir el código a GitHub sin riesgo de filtrar datos corporativos.
+1. Doble clic en `LANZAR_APP.bat`
+2. Espere a que se abra el navegador
+3. Credenciales: **admin** / **10041004**
+
+> Para detener la aplicación, cierre la ventana negra (consola).
+
+---
+
+## Primer uso
+
+1. Inicie sesión con admin / 10041004
+2. En el **Panel de Control**, configure:
+   - **Carpeta de Google Drive** (opcional: para compartir datos con otros PCs)
+   - **Ruta al Excel** de datos maestros (opcional: para importar vehículos, conductores y granjas)
+3. Pulse **Guardar configuración**
+4. Si configuró el Excel, pulse **Importar Maestros desde Excel**
+
+---
+
+## Módulos disponibles
+
+| Módulo | Función |
+|---|---|
+| **Panel de Control** | Configuración, importación, sincronización y copias de seguridad |
+| **Maestros** | Gestión de vehículos, conductores y granjas |
+| **Viajes** | Planificación diaria de viajes de pollo vivo con cálculo automático de horarios |
+| **Frigos** | Listado de servicios de transporte frigorífico |
+| **Aldi** | Listado de servicios de reparto a Aldi |
+| **RRHH** | Generación de jornadas y cálculo de nocturnidad |
+
+---
+
+## Copias de seguridad
+
+- Se crean **automáticamente** antes de importar, sincronizar o restaurar
+- Puede crear una copia manual desde el Panel de Control
+- Puede restaurar cualquier copia anterior
+
+---
+
+## Sincronización con Google Drive
+
+Si varios PCs necesitan compartir datos:
+
+1. Configure la misma carpeta de Google Drive en todos los PCs
+2. Use **Descargar de Drive** para traer datos
+3. Use **Subir a Drive** para compartir cambios
+4. El sistema protege contra ediciones simultáneas
+
+---
+
+## Solución de problemas
+
+| Problema | Solución |
+|---|---|
+| "Python no está instalado" | Instale Python desde python.org y marque "Add Python to PATH" |
+| No se abre el navegador | Abra manualmente `http://127.0.0.1:5000` |
+| Error al instalar dependencias | Compruebe su conexión a Internet |
+| "No se encuentran los archivos" | Si descargó un .zip, extráigalo primero (clic derecho → Extraer todo) |
+| Windows pregunta sobre el Firewall | Pulse Cancelar (la app funciona solo en su PC) |
+| Errores raros o lentitud | No coloque el proyecto dentro de OneDrive o Dropbox |
+
+---
+
+## Notas importantes
+
+- **No borre** las carpetas `venv/` ni `instance/`
+- Si las borra por error, ejecute `LANZAR_APP.bat` de nuevo
+- Para sincronizar datos entre PCs, use la función de Google Drive de la app

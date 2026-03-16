@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-between align-center mb-2">
+    <h2>{{ title }}</h2>
+</div>
+
+<div class="card">
+    {% if planificaciones %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Día</th>
+                    <th>Semana</th>
+                    <th>Generar jornadas</th>
+                    <th>Ver horario</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in planificaciones %}
+                <tr>
+                    <td><strong>{{ p['fecha_operativa'] }}</strong></td>
+                    <td>{{ p['dia_semana'] }}</td>
+                    <td>{{ p['semana_excel'] or '' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('rrhh.generar_jornadas', plan_id=p['id']) }}" style="display:inline">
+                            <button type="submit" class="btn btn-success btn-sm"
+                                    onclick="return confirm('¿Generar jornadas para este día? Se sobreescribirán las existentes.')">
+                                ⚡ Generar
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('rrhh.horario', plan_id=p['id']) }}" class="btn btn-primary btn-sm">Ver horario</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted text-center">No hay planificaciones. Cree una primero desde Viajes.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

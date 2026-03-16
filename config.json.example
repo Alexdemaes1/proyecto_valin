@@ -1,0 +1,10 @@
+{
+    "secret_key": "",
+    "drive_folder_path": "",
+    "master_db_filename": "valin_master.db",
+    "legacy_excel_path": "",
+    "pc_name": "",
+    "admin_password": "10041004",
+    "debug": false,
+    "port": 5000
+}

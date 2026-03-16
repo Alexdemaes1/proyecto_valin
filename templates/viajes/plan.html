@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-between align-center mb-2">
+    <div>
+        <h2>Plan: {{ plan['fecha_operativa'] }} ({{ plan['dia_semana'] }})</h2>
+        <span class="text-muted">Semana {{ plan['semana_excel'] or '?' }}</span>
+    </div>
+    <a href="{{ url_for('viajes.index') }}" class="btn btn-secondary">← Volver</a>
+</div>
+
+{# ─── TABLA DE VIAJES ──────────────────────── #}
+<div class="card">
+    <h3 class="card-title">Viajes Pollo Vivo</h3>
+
+    {% if viajes %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Camión</th>
+                    <th>Conductor</th>
+                    <th>Granja</th>
+                    <th>Llegada</th>
+                    <th>Carga</th>
+                    <th>Salida</th>
+                    <th>Fin</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in viajes %}
+                <tr {% if v['alerta_duplicidad_conductor'] %}class="row-alert"{% endif %}>
+                    <form method="POST" action="{{ url_for('viajes.actualizar_viaje', viaje_id=v['id']) }}">
+                        <td>{{ v['orden_visual'] }}</td>
+                        <td>
+                            <select name="vehiculo_id" class="form-control" style="min-width:100px">
+                                <option value="">—</option>
+                                {% for ve in vehiculos %}
+                                <option value="{{ ve['id'] }}" {% if ve['id'] == v['vehiculo_id'] %}selected{% endif %}>
+                                    {{ ve['codigo_interno'] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select name="conductor_id" class="form-control" style="min-width:120px">
+                                <option value="">—</option>
+                                {% for c in conductores %}
+                                <option value="{{ c['id'] }}" {% if c['id'] == v['conductor_id'] %}selected{% endif %}>
+                                    {{ c['alias'] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select name="granja_id" class="form-control" style="min-width:140px">
+                                <option value="">—</option>
+                                {% for g in granjas %}
+                                <option value="{{ g['id'] }}" {% if g['id'] == v['granja_id'] %}selected{% endif %}>
+                                    {{ g['codigo'] }} — {{ g['nombre_cliente'] }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="time" name="hora_llegada_matadero" class="form-control"
+                                   value="{{ v['hora_llegada_matadero'] }}" style="width:90px">
+                        </td>
+                        <td>{{ v['hora_carga_granja_calc'] or '—' }}</td>
+                        <td>{{ v['hora_salida_sueca_calc'] or '—' }}</td>
+                        <td>{{ v['hora_fin_jornada_aprox_calc'] or '—' }}</td>
+                        <td class="d-flex gap-1">
+                            <button type="submit" class="btn btn-primary btn-sm">💾</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('viajes.eliminar_viaje', viaje_id=v['id']) }}" style="display:inline">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Eliminar este viaje?')">✕</button>
+                    </form>
+                        </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted text-center">No hay viajes en esta planificación. Añada uno con el formulario de abajo.</p>
+    {% endif %}
+</div>
+
+{# ─── AÑADIR VIAJE ─────────────────────────── #}
+<div class="card">
+    <h3 class="card-title">Añadir viaje</h3>
+    <form method="POST" action="{{ url_for('viajes.add_viaje', plan_id=plan['id']) }}" class="form-inline">
+        <div class="form-group">
+            <label for="granja_id_new">Granja</label>
+            <select name="granja_id" id="granja_id_new" class="form-control">
+                <option value="">—</option>
+                {% for g in granjas %}
+                <option value="{{ g['id'] }}">{{ g['codigo'] }} — {{ g['nombre_cliente'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="vehiculo_id_new">Camión</label>
+            <select name="vehiculo_id" id="vehiculo_id_new" class="form-control">
+                <option value="">—</option>
+                {% for ve in vehiculos %}
+                <option value="{{ ve['id'] }}">{{ ve['codigo_interno'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="conductor_id_new">Conductor</label>
+            <select name="conductor_id" id="conductor_id_new" class="form-control">
+                <option value="">—</option>
+                {% for c in conductores %}
+                <option value="{{ c['id'] }}">{{ c['alias'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="hora_llegada_new">Llegada matadero</label>
+            <input type="time" name="hora_llegada" id="hora_llegada_new" class="form-control" value="00:00">
+        </div>
+        <button type="submit" class="btn btn-success">+ Añadir</button>
+    </form>
+</div>
+
+{% endblock %}

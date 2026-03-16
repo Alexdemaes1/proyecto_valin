@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-between align-center mb-2">
+    <h2>{{ title }}</h2>
+    <a href="{{ url_for('maestros.create_' ~ tipo) }}" class="btn btn-primary">+ Nuevo</a>
+</div>
+
+<div class="card">
+    {% if items %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    {% for cab in cabeceras %}
+                    <th>{{ cab }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    {% for col in columnas %}
+                    <td>
+                        {% if col == 'activo' %}
+                            {% if item[col] %}
+                                <span class="badge badge-ok">Activo</span>
+                            {% else %}
+                                <span class="badge badge-off">Inactivo</span>
+                            {% endif %}
+                        {% else %}
+                            {{ item[col] or '' }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted text-center">No hay registros. Puede importarlos desde Excel en el Panel de Control o crearlos manualmente.</p>
+    {% endif %}
+</div>
+
+<a href="{{ url_for('maestros.index') }}" class="btn btn-secondary">← Volver a Maestros</a>
+
+{% endblock %}

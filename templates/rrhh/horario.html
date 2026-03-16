@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-between align-center mb-2">
+    <div>
+        <h2>Horario: {{ plan['fecha_operativa'] }} ({{ plan['dia_semana'] }})</h2>
+    </div>
+    <a href="{{ url_for('rrhh.index') }}" class="btn btn-secondary">← Volver</a>
+</div>
+
+<div class="card">
+    {% if jornadas %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Conductor</th>
+                    <th>Tipo</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Total (min)</th>
+                    <th>Nocturnas (min)</th>
+                    <th>Noct. (h)</th>
+                    <th>Dieta</th>
+                    <th>Viajes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for j in jornadas %}
+                <tr>
+                    <td><strong>{{ j['conductor_alias'] or '—' }}</strong></td>
+                    <td>{{ j['tipo_jornada'] }}</td>
+                    <td>{{ j['hora_inicio_real'] }}</td>
+                    <td>{{ j['hora_fin_real'] }}</td>
+                    <td>{{ j['horas_trabajadas_min'] }}</td>
+                    <td>{{ j['horas_nocturnas_min'] }}</td>
+                    <td>{{ j['horas_nocturnas_decimal'] }}</td>
+                    <td>
+                        {% if j['dieta_bool'] %}
+                            <span class="badge badge-ok">Sí</span>
+                        {% else %}
+                            <span class="badge badge-off">No</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ j['viajes_count'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted text-center">No hay jornadas generadas para este día. Use el botón "Generar" desde la lista de RRHH.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title | default('Valin') }} — Transportes Valin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% if session.get('user_id') %}
+    <nav class="navbar">
+        <a href="{{ url_for('dashboard.index') }}" class="navbar-brand">⬡ VALIN</a>
+        <div class="navbar-links">
+            <a href="{{ url_for('dashboard.index') }}" {% if request.endpoint and request.endpoint.startswith('dashboard') %}class="active"{% endif %}>Panel</a>
+            <a href="{{ url_for('maestros.index') }}" {% if request.endpoint and request.endpoint.startswith('maestros') %}class="active"{% endif %}>Maestros</a>
+            <a href="{{ url_for('viajes.index') }}" {% if request.endpoint and request.endpoint.startswith('viajes') %}class="active"{% endif %}>Viajes</a>
+            <a href="{{ url_for('frigos.index') }}" {% if request.endpoint and request.endpoint.startswith('frigos') %}class="active"{% endif %}>Frigos</a>
+            <a href="{{ url_for('aldi.index') }}" {% if request.endpoint and request.endpoint.startswith('aldi') %}class="active"{% endif %}>Aldi</a>
+            <a href="{{ url_for('rrhh.index') }}" {% if request.endpoint and request.endpoint.startswith('rrhh') %}class="active"{% endif %}>RRHH</a>
+        </div>
+        <div class="navbar-user">
+            {{ session.get('username', '') }}
+            <a href="{{ url_for('auth.logout') }}">Salir</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <div class="container">
+        {# Flash messages #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-between align-center mb-2">
+    <h2>{{ title }}</h2>
+    <form method="POST" action="{{ url_for('viajes.crear_planificacion') }}" class="form-inline">
+        <div class="form-group">
+            <label for="fecha">Nueva planificación:</label>
+            <input type="date" id="fecha" name="fecha" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear</button>
+    </form>
+</div>
+
+<div class="card">
+    {% if planificaciones %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Día</th>
+                    <th>Semana</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in planificaciones %}
+                <tr>
+                    <td><strong>{{ p['fecha_operativa'] }}</strong></td>
+                    <td>{{ p['dia_semana'] }}</td>
+                    <td>{{ p['semana_excel'] or '' }}</td>
+                    <td>
+                        {% if p['estado'] == 'abierta' %}
+                            <span class="badge badge-ok">Abierta</span>
+                        {% else %}
+                            <span class="badge badge-off">Cerrada</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if modulo is defined and modulo == 'frigos' %}
+                            <span class="text-muted">(Próximamente)</span>
+                        {% elif modulo is defined and modulo == 'aldi' %}
+                            <span class="text-muted">(Próximamente)</span>
+                        {% else %}
+                            <a href="{{ url_for('viajes.plan', id=p['id']) }}" class="btn btn-primary btn-sm">Abrir</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted text-center">No hay planificaciones todavía. Cree una usando el formulario de arriba.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

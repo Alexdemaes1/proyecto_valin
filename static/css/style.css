@@ -1,0 +1,308 @@
+/* ============================================================
+   VALIN v2 — Hoja de estilos
+   Diseño limpio, profesional y simple.
+   ============================================================ */
+
+/* Reset y base */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --azul-oscuro: #14345F;
+    --azul-medio: #1C3F78;
+    --azul-claro: #3B6BA5;
+    --azul-fondo: #F0F4FC;
+    --gris-borde: #D1D9E6;
+    --gris-texto: #4A5568;
+    --verde: #2D8659;
+    --rojo: #C53030;
+    --naranja: #D69E2E;
+    --blanco: #FFFFFF;
+    --sombra: 0 1px 3px rgba(0,0,0,0.1);
+    --success-color: #2D8659;
+    --danger-color: #C53030;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--azul-fondo);
+    color: #2D3748;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+a { color: var(--azul-claro); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ─── LAYOUT ────────────────────────────────── */
+.navbar {
+    background: var(--azul-oscuro);
+    color: white;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    box-shadow: var(--sombra);
+}
+.navbar-brand {
+    font-weight: 700;
+    font-size: 18px;
+    color: white;
+    margin-right: 32px;
+}
+.navbar-brand:hover { text-decoration: none; color: white; }
+.navbar-links { display: flex; gap: 4px; flex: 1; }
+.navbar-links a {
+    color: rgba(255,255,255,0.8);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.15s;
+}
+.navbar-links a:hover,
+.navbar-links a.active {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    text-decoration: none;
+}
+.navbar-user {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+}
+.navbar-user a { color: rgba(255,255,255,0.7); }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* ─── FLASH MESSAGES ────────────────────────── */
+.flash {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    border-left: 4px solid;
+}
+.flash-success { background: #F0FFF4; border-color: var(--verde); color: #22543D; }
+.flash-danger  { background: #FFF5F5; border-color: var(--rojo); color: #742A2A; }
+.flash-warning { background: #FFFFF0; border-color: var(--naranja); color: #744210; }
+.flash-info    { background: #EBF8FF; border-color: var(--azul-claro); color: #2A4365; }
+
+/* ─── FORM HELP TEXT ────────────────────────── */
+.form-help {
+    display: block;
+    font-size: 0.82em;
+    color: var(--gris-texto);
+    margin-top: 4px;
+    line-height: 1.4;
+}
+.form-help code {
+    background: var(--azul-fondo);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.92em;
+}
+
+/* ─── CARDS ─────────────────────────────────── */
+.card {
+    background: var(--blanco);
+    border-radius: 10px;
+    box-shadow: var(--sombra);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--azul-oscuro);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--azul-fondo);
+}
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+/* ─── BOTONES ───────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+}
+.btn:hover { filter: brightness(0.92); text-decoration: none; }
+.btn-primary   { background: var(--azul-medio); color: white; }
+.btn-success   { background: var(--verde); color: white; }
+.btn-danger    { background: var(--rojo); color: white; }
+.btn-warning   { background: var(--naranja); color: white; }
+.btn-secondary { background: var(--gris-borde); color: var(--gris-texto); }
+.btn-sm        { padding: 6px 12px; font-size: 13px; }
+.btn-block     { display: block; width: 100%; text-align: center; }
+
+/* ─── FORMULARIOS ───────────────────────────── */
+.form-group {
+    margin-bottom: 16px;
+}
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gris-texto);
+    margin-bottom: 4px;
+}
+.form-control {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--gris-borde);
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+    background: var(--blanco);
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--azul-claro);
+    box-shadow: 0 0 0 3px rgba(59, 107, 165, 0.15);
+}
+textarea.form-control { min-height: 80px; resize: vertical; }
+select.form-control { appearance: auto; }
+
+.form-inline {
+    display: flex;
+    gap: 12px;
+    align-items: end;
+}
+.form-inline .form-group { margin-bottom: 0; }
+
+/* ─── TABLAS ────────────────────────────────── */
+.table-wrapper { overflow-x: auto; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+thead th {
+    background: var(--azul-oscuro);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--gris-borde);
+}
+tbody tr:nth-child(even) { background: var(--azul-fondo); }
+tbody tr:hover { background: #E2E8F0; }
+
+/* ─── ESTADOS Y BADGES ─────────────────────── */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.badge-ok   { background: #C6F6D5; color: #22543D; }
+.badge-warn { background: #FEFCBF; color: #744210; }
+.badge-off  { background: #FED7D7; color: #742A2A; }
+
+/* ─── DASHBOARD STATS ───────────────────────── */
+.stat-card {
+    background: var(--blanco);
+    border-radius: 10px;
+    padding: 16px 20px;
+    text-align: center;
+    box-shadow: var(--sombra);
+    border-top: 3px solid var(--azul-medio);
+}
+.stat-card .stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+}
+.stat-card .stat-label {
+    font-size: 13px;
+    color: var(--gris-texto);
+    margin-top: 4px;
+}
+
+/* ─── SECCIÓN CONFIG ────────────────────────── */
+.config-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+/* ─── LOGIN ─────────────────────────────────── */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--azul-oscuro), var(--azul-medio));
+}
+.login-box {
+    background: var(--blanco);
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.login-box h1 {
+    text-align: center;
+    color: var(--azul-oscuro);
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+.login-box .subtitle {
+    text-align: center;
+    color: var(--gris-texto);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* ─── ALERTA DE DUPLICIDAD ──────────────────── */
+.row-alert { background: #FFF5F5 !important; }
+
+/* ─── UTILIDADES ────────────────────────────── */
+.text-muted { color: var(--gris-texto); font-size: 13px; }
+.text-center { text-align: center; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.d-flex { display: flex; }
+.gap-1 { gap: 8px; }
+.gap-2 { gap: 16px; }
+.justify-between { justify-content: space-between; }
+.align-center { align-items: center; }
+
+/* ─── RESPONSIVE ────────────────────────────── */
+@media (max-width: 768px) {
+    .navbar { padding: 0 12px; }
+    .navbar-links { display: none; } /* Simplificado para MVP */
+    .container { padding: 16px; }
+    .config-section { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr; }
+}

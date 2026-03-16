@@ -1,28 +1,28 @@
+# === Valin v2 .gitignore ===
+
+# Entorno virtual (creado por LANZAR_APP.bat)
 venv/
+
+# Cache de Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-env/
-pip-log.txt
-pip-delete-this-directory.txt
 .pytest_cache/
 
-# Directorios de configuraciones e instancias privadas
+# Base de datos local y copias de seguridad
 instance/
+
+# Configuracion local del PC (cada PC tiene la suya)
+config.json
+
+# Variables de entorno (no se usan, pero por si acaso)
 .env
-# local_settings.json (Eliminado del ignore para permitir versionado de rutas corporativas)
 
-# Instalador Universal (Excluido del repo, para distribución manual)
-INSTALAR_VALIN.bat
-
-# Archivos de sqlite temporales
-*.db
-*.sqlite3
-*.db-journal
-
-# VSCode/IDE
+# IDEs
 .vscode/
 .idea/
-*.swp
+*.code-workspace
+
+# Archivos del sistema
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% block content %}
+
+{# ─── ESTADÍSTICAS RÁPIDAS ─────────────────── #}
+<div class="card-grid mb-2">
+    <div class="stat-card">
+        <div class="stat-number">{{ conteos.vehiculos }}</div>
+        <div class="stat-label">Vehículos</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ conteos.conductores }}</div>
+        <div class="stat-label">Conductores</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ conteos.granjas }}</div>
+        <div class="stat-label">Granjas</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ conteos.rutas_frigo }}</div>
+        <div class="stat-label">Rutas Frigo</div>
+    </div>
+</div>
+
+{# ─── MODO DE TRABAJO ─────────────────────── #}
+<div class="card mb-2">
+    {% if config.drive_configurado and config.drive_accesible %}
+        <p><span class="badge badge-ok">☁️ Modo Drive</span>
+           Conectado a Google Drive. Los datos se pueden compartir con otros PCs.</p>
+    {% elif config.drive_configurado and not config.drive_accesible %}
+        <p><span class="badge badge-warn">⚠️ Drive no accesible</span>
+           La carpeta de Drive no está disponible. Trabajando con datos locales.</p>
+    {% else %}
+        <p><span class="badge badge-off">💻 Modo Local</span>
+           Trabajando solo con datos locales en este PC. Para compartir datos,
+           configure Google Drive en la configuración.</p>
+    {% endif %}
+</div>
+
+<div class="config-section">
+
+    {# ─── COLUMNA IZQUIERDA: CONFIGURACIÓN ──── #}
+    <div>
+        <div class="card">
+            <h3 class="card-title">⚙️ Configuración del Sistema</h3>
+            <form method="POST" action="{{ url_for('dashboard.guardar_config') }}">
+
+                <div class="form-group">
+                    <label for="pc_name">Nombre de este PC</label>
+                    <input type="text" id="pc_name" name="pc_name"
+                           class="form-control" value="{{ config.pc_name }}">
+                    <small class="form-help">Identificador del PC (para saber quién edita los datos)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="drive_folder_path">Carpeta de Google Drive (opcional)</label>
+                    <input type="text" id="drive_folder_path" name="drive_folder_path"
+                           class="form-control" value="{{ config.drive_folder_path }}"
+                           placeholder="Dejar vacío para trabajar solo en local">
+                    <small class="form-help">
+                        Ruta a la carpeta de Google Drive donde se comparte la base maestra.
+                        Ejemplo: <code>G:\Mi unidad\Valin</code>
+                        {% if config.drive_configurado %}
+                            {% if config.drive_accesible %}
+                                — <span style="color: var(--success-color)">✓ Carpeta accesible</span>
+                            {% else %}
+                                — <span style="color: var(--danger-color)">✕ No accesible</span>
+                            {% endif %}
+                        {% endif %}
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="master_db_filename">Nombre del archivo maestro en Drive</label>
+                    <input type="text" id="master_db_filename" name="master_db_filename"
+                           class="form-control" value="{{ config.master_db_filename }}"
+                           placeholder="valin_master.db">
+                    <small class="form-help">Nombre del archivo .db en la carpeta de Drive</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="legacy_excel_path">Ruta al Excel de datos maestros</label>
+                    <input type="text" id="legacy_excel_path" name="legacy_excel_path"
+                           class="form-control" value="{{ config.legacy_excel_path }}"
+                           placeholder="Dejar vacío si no usa Excel">
+                    <small class="form-help">
+                        Ruta completa al archivo .xlsx o .xlsm con los datos maestros.
+                        Ejemplo: <code>G:\Mi unidad\Valin\CONTROL_TRAFICO.xlsm</code>
+                        {% if config.excel_configurado %}
+                            {% if config.excel_existe %}
+                                — <span style="color: var(--success-color)">✓ Archivo encontrado</span>
+                            {% else %}
+                                — <span style="color: var(--danger-color)">✕ Archivo no encontrado</span>
+                            {% endif %}
+                        {% endif %}
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Guardar configuración</button>
+            </form>
+        </div>
+
+        {# ─── IMPORTACIÓN DE DATOS ──────────────── #}
+        <div class="card">
+            <h3 class="card-title">📥 Importación de Datos Maestros</h3>
+            {% if config.excel_configurado and config.excel_existe %}
+                <p class="text-muted mb-1">Excel: {{ config.legacy_excel_path }}</p>
+                <p class="text-muted mb-1" style="font-size: 0.85em">
+                    Importa vehículos, conductores y granjas del Excel.
+                    Los registros que ya existan se mantienen sin cambios.
+                    Se crea una copia de seguridad automática antes de importar.
+                </p>
+                <form method="POST" action="{{ url_for('dashboard.importar_excel') }}">
+                    <button type="submit" class="btn btn-success"
+                            onclick="return confirm('¿Importar datos maestros desde Excel?\n\nSe creará una copia de seguridad automática.\nLos registros existentes NO se modificarán.')">
+                        📊 Importar Maestros desde Excel
+                    </button>
+                </form>
+            {% elif config.excel_configurado and not config.excel_existe %}
+                <p class="text-muted">
+                    ⚠️ El archivo Excel configurado no se encuentra.<br>
+                    Verifique la ruta en la configuración: <code>{{ config.legacy_excel_path }}</code>
+                </p>
+            {% else %}
+                <p class="text-muted">
+                    Para importar datos desde Excel, configure la ruta al archivo
+                    en la sección de Configuración.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ─── COLUMNA DERECHA: SYNC + BACKUPS ───── #}
+    <div>
+        <div class="card">
+            <h3 class="card-title">☁️ Sincronización con Google Drive</h3>
+
+            {% if drive_status.drive_configurado %}
+                {# Estado de Drive #}
+                {% if drive_status.drive_accesible %}
+                    <p><span class="badge badge-ok">✓ Conectado</span> {{ drive_status.mensaje }}</p>
+                {% else %}
+                    <p><span class="badge badge-off">✕ No accesible</span> {{ drive_status.mensaje }}</p>
+                {% endif %}
+
+                {% if drive_status.bloqueado %}
+                    <p><span class="badge badge-warn">🔒 Bloqueado</span>
+                       Editando: {{ drive_status.bloqueado_por }}</p>
+                {% endif %}
+
+                {% if drive_status.drive_accesible %}
+                    <div class="d-flex gap-1 mt-1">
+                        <form method="POST" action="{{ url_for('dashboard.sync_pull') }}">
+                            <button type="submit" class="btn btn-primary btn-sm"
+                                    {% if not drive_status.db_existe_en_drive %}disabled{% endif %}
+                                    onclick="return confirm('¿Descargar la base de datos desde Drive?\n\nSu base local actual se reemplazará.\nSe creará una copia de seguridad automática.')">
+                                ⬇️ Descargar de Drive
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('dashboard.sync_push') }}">
+                            <button type="submit" class="btn btn-warning btn-sm"
+                                    {% if drive_status.bloqueado %}disabled{% endif %}
+                                    onclick="return confirm('¿Subir su base de datos local a Drive?\n\nLa base maestra en Drive se reemplazará.\nSe creará una copia de seguridad automática.')">
+                                ⬆️ Subir a Drive
+                            </button>
+                        </form>
+                    </div>
+                    {% if not drive_status.db_existe_en_drive %}
+                        <p class="text-muted mt-1" style="font-size: 0.85em">
+                            No hay base maestra en Drive. Pulse "Subir a Drive" para crear la primera copia.
+                        </p>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <p class="text-muted">
+                    Trabajando en modo local. Para compartir datos con otros PCs,
+                    configure la carpeta de Google Drive en la sección de Configuración.
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">💾 Copias de Seguridad</h3>
+            <p class="text-muted mb-1" style="font-size: 0.85em">
+                Las copias se crean automáticamente antes de importar, sincronizar o restaurar.
+            </p>
+            <form method="POST" action="{{ url_for('dashboard.crear_backup') }}" class="mb-2">
+                <button type="submit" class="btn btn-secondary btn-sm">Crear Copia Manual</button>
+            </form>
+
+            {% if backups %}
+            <table>
+                <thead>
+                    <tr><th>Motivo</th><th>Fecha</th><th>MB</th><th></th></tr>
+                </thead>
+                <tbody>
+                {% for b in backups %}
+                    <tr>
+                        <td>{{ b.motivo }}</td>
+                        <td>{{ b.fecha }}</td>
+                        <td>{{ b.tamaño_mb }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('dashboard.restaurar_backup') }}" style="display:inline">
+                                <input type="hidden" name="backup_nombre" value="{{ b.nombre }}">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Restaurar esta copia de seguridad?\n\nFecha: {{ b.fecha }}\nMotivo: {{ b.motivo }}\n\nLa base de datos actual se guardará antes de restaurar.')">
+                                    Restaurar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p class="text-muted">No hay copias de seguridad todavía.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

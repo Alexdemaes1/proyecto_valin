@@ -1,8 +1,8 @@
 import pytest
 from datetime import date
-from app.services.viajes_engine import ViajesEngine
-from app.services.rrhh_engine import RrhhEngine
-from app.services.aldi_engine import AldiEngine
+from engines.viajes_engine import ViajesEngine
+from engines.rrhh_engine import RrhhEngine
+from engines.aldi_engine import AldiEngine
 
 def test_calculo_inverso_madrugada():
     # Llega matadero a las 01:00. Trayecto 1h, Carga 1h. 

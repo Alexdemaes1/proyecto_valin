@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-2">{{ title }}</h2>
+
+<div class="card" style="max-width: 600px;">
+    <form method="POST">
+        {% for campo in campos %}
+        <div class="form-group">
+            <label for="{{ campo.name }}">
+                {{ campo.label }}
+                {% if campo.required %}<span style="color: var(--rojo)">*</span>{% endif %}
+            </label>
+            {% if campo.type == 'textarea' %}
+                <textarea id="{{ campo.name }}" name="{{ campo.name }}" class="form-control"
+                          {% if campo.required %}required{% endif %}>{{ campo.value | default('') }}</textarea>
+            {% elif campo.type == 'number' %}
+                <input type="number" id="{{ campo.name }}" name="{{ campo.name }}" class="form-control"
+                       value="{{ campo.value | default('') }}"
+                       {% if campo.required %}required{% endif %}>
+            {% else %}
+                <input type="text" id="{{ campo.name }}" name="{{ campo.name }}" class="form-control"
+                       value="{{ campo.value | default('') }}"
+                       {% if campo.required %}required{% endif %}>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="d-flex gap-1">
+            <button type="submit" class="btn btn-success">Guardar {{ tipo }}</button>
+            <a href="{{ url_for('maestros.index') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
